@@ -7,6 +7,15 @@
 3. Chép `docs/phase2/progress/_mau.md` thành `docs/phase2/progress/<task-id>.md`, điền mục "Hợp đồng".
 4. `npm run check:harness` phải xanh. Mở PR nháp sớm để nhóm thấy hướng đi.
 
+## Mở PR đúng repo
+
+Repo này là fork của `HUY-TD16/SA_BankAccount`. Nút "Compare & pull request" trên GitHub mặc định chọn đích là repo gốc đó, không phải repo của nhóm. Ngày 25/11 đã có hai PR mở nhầm sang đó.
+
+- Mở PR bằng link này, đích đã là `main` của nhóm: `https://github.com/datdooo/SA_BankAccount/compare/main...<tên-nhánh>`
+- Nếu mở từ nút trên GitHub, kiểm ô **base repository** phải là `datdooo/SA_BankAccount` trước khi bấm tạo.
+- Dùng GitHub CLI thì chạy một lần trong repo: `gh repo set-default datdooo/SA_BankAccount`. Sau đó `gh pr create` luôn nhắm vào fork.
+- Lỡ mở nhầm: vào PR đó bấm "Close pull request", rồi mở lại bằng link trên. Nhóm HUY nhìn thấy PR trên repo của họ, nên đóng ngay.
+
 Mỗi người một task `active`. Muốn đổi việc thì chuyển task cũ về `blocked` (ghi `blocked_reason`) hoặc `not_started`.
 
 ## Hợp đồng task

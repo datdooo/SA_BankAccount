@@ -67,6 +67,7 @@ Các thay đổi kiến trúc pha 2 phải giữ nguyên những điều sau. Te
 - Một task chỉ chuyển sang `passing` khi lệnh xác minh của nó đã chạy thật và kết quả được ghi vào `evidence`. Sửa code xong chưa phải là xong.
 - Mọi cải tiến hiệu năng phải có số đo trước và sau theo `docs/phase2/giao-thuc-do.md`, cùng phần cứng, cùng kịch bản. Không bịa số, không lấy số từ máy cá nhân để so với số Kaggle.
 - Thay đổi kiến trúc nào cũng có ADR trong `docs/phase2/adr/` trước khi merge.
+- PR chỉ mở vào `datdooo/SA_BankAccount` nhánh `main`, không bao giờ vào `HUY-TD16/SA_BankAccount`. Với `gh`: chạy `gh repo set-default datdooo/SA_BankAccount` trước. Xem `docs/phase2/quy-trinh.md` mục "Mở PR đúng repo".
 - Người viết code không tự duyệt. Một thành viên khác review theo `docs/phase2/rubric-review.md`.
 - Không đổi hợp đồng API (đường dẫn, mã lỗi, envelope) nếu nhóm chưa thống nhất trong ADR.
 - Nhận xét review lặp lại lần thứ hai thì biến nó thành test hoặc thêm vào script kiểm tra, đừng chỉ nhắc lại.
