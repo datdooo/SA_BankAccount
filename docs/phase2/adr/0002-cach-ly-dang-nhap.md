@@ -1,4 +1,4 @@
-# ADR-001: Cách ly tải đăng nhập (Login Load Isolation) bằng Nginx Routing và Rate Limiting
+# 0002. Cách ly tải đăng nhập (Login Load Isolation) bằng Nginx Routing và Rate Limiting
 
 * **Trạng thái (Status):** Đề xuất
 * **Công nghệ liên quan:** Node.js `24.22.0`, PostgreSQL `15.19`, Bcrypt (cost `12`), JWT, Prisma, Nginx, Docker Compose
@@ -52,11 +52,11 @@ Nhóm quyết định áp dụng **Phương án 2** với thiết kế triển k
 
 2. **Định tuyến tại lớp biên (Reverse Proxy Routing):**
    Đặt **Nginx** làm cổng giao tiếp duy nhất (API Gateway / Reverse Proxy) tiếp nhận mọi lưu lượng từ Client và Swagger UI:
-   * Đường dẫn `POST /api/auth/login` được định tuyến (`proxy_pass`) trực tiếp sang cụm `auth-api`.
-   * Toàn bộ các đường dẫn nghiệp vụ còn lại (`/api/accounts/**`, `/api/transactions/**`) được định tuyến sang cụm `core-api`.
+   * Đường dẫn `POST /api/v1/auth/login` được định tuyến (`proxy_pass`) trực tiếp sang cụm `auth-api`.
+   * Toàn bộ các đường dẫn nghiệp vụ còn lại (`/api/v1/accounts/**`, `/api/v1/transfers/**`) được định tuyến sang cụm `core-api`.
 
 3. **Giới hạn tốc độ tại tầng biên (Edge Rate Limiting):**
-   Cấu hình `limit_req_zone` trên Nginx riêng cho endpoint `/api/auth/login` (ví dụ: giới hạn $10\text{ req/s}$ kết hợp hàng đợi `burst` nhỏ) để chủ động từ chối sớm và trả về mã HTTP **`429 Too Many Requests`** ngay tại tầng Nginx khi lưu lượng vượt ngưỡng chịu tải vật lý ($\sim 11\text{ req/s}$), ngăn ngừa tình trạng dồn ứ hàng đợi bên trong `auth-api`.
+   Cấu hình `limit_req_zone` trên Nginx riêng cho endpoint `/api/v1/auth/login` (ví dụ: giới hạn $10\text{ req/s}$ kết hợp hàng đợi `burst` nhỏ) để chủ động từ chối sớm và trả về mã HTTP **`429 Too Many Requests`** ngay tại tầng Nginx khi lưu lượng vượt ngưỡng chịu tải vật lý ($\sim 11\text{ req/s}$), ngăn ngừa tình trạng dồn ứ hàng đợi bên trong `auth-api`.
 
 4. **Chia sẻ trạng thái tối thiểu (Stateless Shared-Nothing Execution):**
    Cả hai cụm `auth-api` và `core-api` kết nối chung tới cơ sở dữ liệu **PostgreSQL** và sử dụng chung khóa bí mật **`JWT_SECRET`**. Cơ chế này cho phép token do `auth-api` ký phát được `core-api` xác thực hoàn toàn không trạng thái (*stateless*) mà không cần gọi API chéo qua lại giữa hai cụm.
@@ -78,4 +78,4 @@ Nhóm quyết định áp dụng **Phương án 2** với thiết kế triển k
 
 ## 5. Tài liệu tham chiếu triển khai (Implementation Artifacts)
 * `docker-compose.yml`: Định nghĩa 2 service `auth-api`, `core-api` cùng cấu hình giới hạn CPU và container `nginx`.
-* `nginx/nginx.conf`: Cấu hình `upstream`, `location /api/auth/login`, `limit_req_zone` và chuyển tiếp header chuẩn (`X-Real-IP`, `X-Forwarded-For`).
+* `nginx/nginx.conf`: Cấu hình `upstream`, `location /api/v1/auth/login`, `limit_req_zone` và chuyển tiếp header chuẩn (`X-Real-IP`, `X-Forwarded-For`).

@@ -4,3 +4,5 @@ Mỗi quyết định một file `NNNN-ten-ngan.md`, đánh số tăng dần, ch
 
 | Số | Tiêu đề | Trạng thái | Task |
 | --- | --- | --- | --- |
+| [0001](0001-health-endpoints.md) | Tách health endpoint cho giám sát | Đề xuất | P2-04 |
+| [0002](0002-cach-ly-dang-nhap.md) | Cách ly tải đăng nhập bằng Nginx và giới hạn tốc độ | Đề xuất | P2-03 |
